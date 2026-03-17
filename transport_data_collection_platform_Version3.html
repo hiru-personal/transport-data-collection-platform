@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transport Data Collection Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1B5E75;
+            --primary-light: #E0F2F7;
+            --secondary: #2E8CA8;
+            --success: #16A34A;
+            --warning: #EA8C1C;
+            --danger: #DC2626;
+            --neutral-50: #FAFAFA;
+            --neutral-100: #F4F4F5;
+            --neutral-200: #E4E4E7;
+            --neutral-300: #D4D4D8;
+            --neutral-500: #71717A;
+            --neutral-700: #3F3F46;
+            --neutral-900: #18181B;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--neutral-50);
+            color: var(--neutral-900);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary) 0%, #0F4A5E 100%);
+            color: var(--white);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(27, 94, 117, 0.15);
+        }
+
+        .nav-brand {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+
+        .nav-hidden {
+            display: none;
+        }
+
+        /* Screen Switcher */
+        .screen-switcher {
+            background: var(--neutral-100);
+            border-bottom: 1px solid var(--neutral-200);
+            padding: 12px 24px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 12px;
+        }
+
+        .screen-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--neutral-300);
+            border-radius: 6px;
+            background: var(--white);
+            color: var(--neutral-700);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .screen-btn:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .screen-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        /* Screen Container */
+        .screen {
+            display: none;
+            min-height: calc(100vh - 140px);
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Forms */
+        .form-container {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--neutral-200);
+            padding: 32px;
+            max-width: 500px;
+            margin: 40px auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .form-container-wide {
+            max-width: 100%;
+        }
+
+        .form-header {
+            margin-bottom: 28px;
+        }
+
+        .form-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--neutral-900);
+            margin-bottom: 8px;
+        }
+
+        .form-subtitle {
+            font-size: 14px;
+            color: var(--neutral-500);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--neutral-700);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-label .required {
+            color: var(--danger);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--neutral-300);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23374151' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 32px;
+            cursor: pointer;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: var(--neutral-500);
+            margin-top: 4px;
+        }
+
+        /* Radio & Checkbox */
+        .form-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .form-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .form-option input[type="radio"],
+        .form-option input[type="checkbox"] {
+            cursor: pointer;
+            accent-color: var(--primary);
+            width: 16px;
+            height: 16px;
+        }
+
+        .form-option.multiple {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .form-option.multiple .option-item {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: #0F4A5E;
+            box-shadow: 0 4px 12px rgba(27, 94, 117, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--neutral-200);
+            color: var(--neutral-900);
+        }
+
+        .btn-secondary:hover {
+            background: var(--neutral-300);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--neutral-300);
+            background: var(--white);
+            color: var(--neutral-700);
+        }
+
+        .btn-outline:hover {
+            background: var(--neutral-100);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .btn-danger:hover {
+            background: #991B1B;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            justify-content: flex-end;
+        }
+
+        /* Alerts & Badges */
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-info {
+            background: #DBEAFE;
+            color: #1E40AF;
+            border-left: 4px solid #3B82F6;
+        }
+
+        .alert-success {
+            background: #DCFCE7;
+            color: #166534;
+            border-left: 4px solid #16A34A;
+        }
+
+        .alert-warning {
+            background: #FEF3C7;
+            color: #92400E;
+            border-left: 4px solid #F59E0B;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-primary {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .badge-success {
+            background: #DCFCE7;
+            color: #166534;
+        }
+
+        .badge-warning {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .badge-danger {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        /* Login Screen */
+        .login-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 60px);
+            background: linear-gradient(135deg, var(--primary) 0%, #0F4A5E 100%);
+        }
+
+        .login-container {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 40px 36px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .login-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-light);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: var(--neutral-200);
+        }
+
+        .divider-text {
+            font-size: 12px;
+            color: var(--neutral-500);
+        }
+
+        /* Profile Screen */
+        .profile-header {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--neutral-200);
+            padding: 28px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--neutral-900);
+            margin-bottom: 4px;
+        }
+
+        .profile-meta {
+            font-size: 13px;
+            color: var(--neutral-500);
+            margin-bottom: 8px;
+        }
+
+        .profile-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+        }
+
+        .profile-status.submitted {
+            color: var(--success);
+        }
+
+        .profile-status.pending {
+            color: var(--warning);
+        }
+
+        .edit-btn {
+            padding: 10px 16px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .edit-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .info-card {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--neutral-200);
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .info-card-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--neutral-200);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 8px 0;
+            font-size: 13px;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--neutral-500);
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: var(--neutral-900);
+            font-weight: 600;
+            text-align: right;
+        }
+
+        /* Admin Dashboard */
+        .admin-header {
+            margin-bottom: 24px;
+        }
+
+        .admin-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--neutral-900);
+            margin-bottom: 4px;
+        }
+
+        .admin-subtitle {
+            font-size: 13px;
+            color: var(--neutral-500);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--neutral-200);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .stat-value {
+            font-family: 'Poppins', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--neutral-500);
+            font-weight: 500;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--neutral-200);
+            padding: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 180px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--neutral-700);
+            white-space: nowrap;
+        }
+
+        .filter-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--neutral-300);
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 8px 12px 8px 32px;
+            border: 1px solid var(--neutral-300);
+            border-radius: 6px;
+            font-size: 13px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath fill='%236B7280' d='M9.5 8h-.79l-.28-.27A4.47 4.47 0 0010 5.5 4.5 4.5 0 105.5 10a4.47 4.47 0 002.23-.57l.27.28v.79l3.5 3.5 1.04-1.04-3.5-3.5zm-4 0C5.12 8 3 5.88 3 3.5S5.12-1 7.5-1 12 1.12 12 3.5 9.88 8 7.5 8z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: 10px center;
+        }
+
+        /* Table */
+        .table-wrapper {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--neutral-200);
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .table thead {
+            background: var(--neutral-100);
+            border-bottom: 1px solid var(--neutral-200);
+        }
+
+        .table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--neutral-700);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--neutral-200);
+            color: var(--neutral-700);
+        }
+
+        .table tbody tr:hover {
+            background: var(--neutral-50);
+        }
+
+        .table-name {
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+
+        .table-id {
+            font-size: 12px;
+            color: var(--neutral-500);
+            margin-top: 2px;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin-top: 16px;
+            padding: 16px;
+        }
+
+        .pagination .btn {
+            padding: 6px 10px;
+            font-size: 12px;
+            border: 1px solid var(--neutral-300);
+            background: var(--white);
+            color: var(--neutral-700);
+        }
+
+        .pagination .btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        /* Stepper */
+        .form-stepper {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 28px;
+            justify-content: space-between;
+        }
+
+        .stepper-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .stepper-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--neutral-200);
+            color: var(--neutral-700);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 13px;
+            margin: 0 auto 8px;
+        }
+
+        .stepper-item.active .stepper-number {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .stepper-item.completed .stepper-number {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .stepper-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--neutral-700);
+        }
+
+        .stepper-item.active .stepper-label {
+            color: var(--primary);
+        }
+
+        /* Section Divider */
+        .section-divider {
+            margin: 28px 0 20px 0;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--neutral-200);
+        }
+
+        .section-divider-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .section-divider-subtitle {
+            font-size: 12px;
+            color: var(--neutral-500);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .table {
+                font-size: 12px;
+            }
+
+            .table th,
+            .table td {
+                padding: 10px 12px;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .form-group.two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<div class="navbar">
+    <div class="nav-brand">
+        <span>🚚</span> Transport Ministry - Staff Commute System
+    </div>
+    <div id="navUser" class="nav-user nav-hidden">
+        <div class="user-avatar" id="userInitials">HD</div>
+        <div>
+            <div style="font-size: 13px; font-weight: 600;" id="userName">Hiruni Dissanayake</div>
+            <div style="font-size: 11px; opacity: 0.8;" id="userRole">Employee</div>
+        </div>
+    </div>
+</div>
+
+<!-- SCREEN SWITCHER -->
+<div class="screen-switcher">
+    <span style="font-size: 12px; color: var(--neutral-500); padding: 6px 12px;">Preview Screens:</span>
+    <button class="screen-btn active" onclick="showScreen('login')">1. Login</button>
+    <button class="screen-btn" onclick="showScreen('register')">2. Registration</button>
+    <button class="screen-btn" onclick="showScreen('profile')">3. My Profile</button>
+    <button class="screen-btn" onclick="showScreen('admin')">4. Admin Dashboard</button>
+    <button class="screen-btn" onclick="showScreen('addEmployee')">5. Add Employee</button>
+</div>
+
+<!-- SCREEN 1: LOGIN -->
+<div class="screen active" id="screen-login">
+    <div class="login-wrapper">
+        <div class="login-container">
+            <div class="login-icon">🌍</div>
+            <div class="form-header">
+                <div class="form-title">Staff Login Portal</div>
+                <div class="form-subtitle">Transport Ministry Commute System</div>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-bottom: 16px;">
+                <span>📧</span> Sign in with Google SSO
+            </button>
+
+            <div class="divider">
+                <div class="divider-line"></div>
+                <div class="divider-text">OR</div>
+                <div class="divider-line"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Staff ID <span class="required">*</span></label>
+                <input type="text" class="form-input" placeholder="e.g. UDA-2024-3521">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password <span class="required">*</span></label>
+                <input type="password" class="form-input" placeholder="••••••••">
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-bottom: 16px;" onclick="showScreen('profile')">
+                Sign In
+            </button>
+
+            <div style="text-align: center; font-size: 13px; color: var(--neutral-500);">
+                Don't have an account? <span style="color: var(--primary); cursor: pointer; font-weight: 600;" onclick="showScreen('register')">Create one →</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SCREEN 2: REGISTRATION -->
+<div class="screen" id="screen-register">
+    <div class="container">
+        <div style="margin-bottom: 16px;">
+            <button class="btn btn-outline" onclick="showScreen('login')" style="font-size: 12px;">← Back to Login</button>
+        </div>
+
+        <div class="form-container form-container-wide">
+            <div class="form-header">
+                <div class="form-title">Staff Profile Registration</div>
+                <div class="form-subtitle">Please provide your complete commute and residence details</div>
+            </div>
+
+            <div class="alert alert-info">
+                <span>ℹ️</span>
+                <span>Fields marked with <span class="required">*</span> are mandatory</span>
+            </div>
+
+            <div class="form-stepper">
+                <div class="stepper-item completed">
+                    <div class="stepper-number">✓</div>
+                    <div class="stepper-label">Account</div>
+                </div>
+                <div class="stepper-item active">
+                    <div class="stepper-number">2</div>
+                    <div class="stepper-label">Personal Details</div>
+                </div>
+                <div class="stepper-item">
+                    <div class="stepper-number">3</div>
+                    <div class="stepper-label">Residence & Commute</div>
+                </div>
+            </div>
+
+            <!-- SECTION 1: LOGIN CREDENTIALS -->
+            <div style="margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--neutral-200);">
+                <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 14px; color: var(--primary);">Step 1: Account Credentials</h3>
+                <div class="form-group two-col">
+                    <div>
+                        <label class="form-label">Staff ID <span class="required">*</span></label>
+                        <input type="text" class="form-input" placeholder="e.g. UDA-2024-3521">
+                    </div>
+                    <div>
+                        <label class="form-label">Create Password <span class="required">*</span></label>
+                        <input type="password" class="form-input" placeholder="Min 8 characters">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: PERSONAL INFORMATION -->
+            <div style="margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--neutral-200);">
+                <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 14px; color: var(--primary);">Step 2: Personal Information</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">Full Name <span class="required">*</span></label>
+                    <input type="text" class="form-input" placeholder="As per NIC document" value="Hiruni Dissanayake">
+                </div>
+
+                <div class="form-group two-col">
+                    <div>
+                        <label class="form-label">Designation <span class="required">*</span></label>
+                        <input type="text" class="form-input" placeholder="e.g. Urban Planner" value="Urban Planner - Transportation">
+                    </div>
+                    <div>
+                        <label class="form-label">Department <span class="required">*</span></label>
+                        <input type="text" class="form-input" placeholder="e.g. Planning Division" value="Transportation Planning">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Organization <span class="required">*</span></label>
+                    <select class="form-select">
+                        <option>— Select Organization —</option>
+                        <option selected>Urban Development Authority (UDA)</option>
+                        <option>Road Development Authority (RDA)</option>
+                    </select>
+                </div>
+
+                <div class="form-group two-col">
+                    <div>
+                        <label class="form-label">Work Email</label>
+                        <input type="email" class="form-input" placeholder="staff@uda.gov.lk" value="hiruni.d@uda.gov.lk">
+                    </div>
+                    <div>
+                        <label class="form-label">Contact Number <span class="required">*</span></label>
+                        <input type="tel" class="form-input" placeholder="+94-71-2345-678" value="+94-71-2845-923">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: RESIDENCE & COMMUTE DETAILS -->
+            <div style="margin-bottom: 28px;">
+                <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 14px; color: var(--primary);">Step 3: Residence & Commute Details</h3>
+                
+                <!-- SUB-SECTION A: PERMANENT HOME ADDRESS -->
+                <div class="section-divider">
+                    <div class="section-divider-title">🏠 Permanent Home Address</div>
+                    <div class="section-divider-subtitle">Your official residence on record</div>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label class="form-label">Permanent Home Address <span class="required">*</span></label>
+                    <input type="text" class="form-input" placeholder="House/Street/Building name" value="456 Matara Road, Galle">
+                </div>
+
+                <!-- SUB-SECTION B: CURRENT LIVING DETAILS -->
+                <div class="section-divider">
+                    <div class="section-divider-title">🏘️ Current Living Details</div>
+                    <div class="section-divider-subtitle">Where you currently stay (home, rental, boarding, etc.)</div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label class="form-label">Current Residence Address <span class="required">*</span></label>
+                    <input type="text" class="form-input" placeholder="Current house/street/apartment address" value="123 Colombo Road, Colombo 6">
+                </div>
+
+                <div class="form-group two-col">
+                    <div>
+                        <label class="form-label">City / Town <span class="required">*</span></label>
+                        <input type="text" class="form-input" placeholder="e.g. Colombo, Galle" value="Colombo">
+                    </div>
+                    <div>
+                        <label class="form-label">District <span class="required">*</span></label>
+                        <select class="form-select">
+                            <option>— Select District —</option>
+                            <option>Colombo</option>
+                            <option>Gampaha</option>
+                            <option>Kalutara</option>
+                            <option>Kandy</option>
+                            <option>Matale</option>
+                            <option>Nuwara Eliya</option>
+                            <option>Galle</option>
+                            <option>Matara</option>
+                            <option>Hambantota</option>
+                            <option>Jaffna</option>
+                            <option>Mullaitivu</option>
+                            <option>Batticaloa</option>
+                            <option>Ampara</option>
+                            <option>Trincomalee</option>
+                            <option>Kurunegala</option>
+                            <option>Puttalam</option>
+                            <option>Anuradhapura</option>
+                            <option>Polonnaruwa</option>
+                            <option>Badulla</option>
+                            <option>Moneragala</option>
+                            <option>Ratnapura</option>
+                            <option>Kegalle</option>
+                            <option>Mannar</option>
+                            <option>Vavuniya</option>
+                            <option selected>Colombo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group two-col">
+                    <div>
+                        <label class="form-label">Province <span class="required">*</span></label>
+                        <select class="form-select">
+                            <option>— Select Province —</option>
+                            <option selected>Western Province</option>
+                            <option>Central Province</option>
+                            <option>Southern Province</option>
+                            <option>Northern Province</option>
+                            <option>Eastern Province</option>
+                            <option>North Central Province</option>
+                            <option>North Western Province</option>
+                            <option>Uva Province</option>
+                            <option>Sabaragamuwa Province</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Divisional Secretariat (DS) <span class="required">*</span></label>
+                        <select class="form-select">
+                            <option>— Select DS Division —</option>
+                            <option>Colombo</option>
+                            <option>Dehiwala</option>
+                            <option>Ratmalana</option>
+                            <option>Kolonnawa</option>
+                            <option>Kaduwela</option>
+                            <option>Kotte</option>
+                            <option>Maharagama</option>
+                            <option>Kesbewa</option>
+                            <option>Homagama</option>
+                            <option>Padukka</option>
+                            <option>Seethawaka</option>
+                            <option>Moratuwa</option>
+                            <option selected>Colombo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group two-col">
+                    <div>
+                        <label class="form-label">Distance to Office (km) <span class="required">*</span></label>
+                        <input type="number" class="form-input" placeholder="e.g. 12.5" step="0.1" value="15">
+                    </div>
+                    <div>
+                        <label class="form-label">Estimated Travel Time <span class="required">*</span></label>
+                        <input type="text" class="form-input" placeholder="e.g. 45 min" value="45 minutes">
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label class="form-label">Primary Travel Mode <span class="required">*</span></label>
+                    <div class="form-help" style="margin-bottom: 10px;">Select the travel mode(s) you primarily use for commuting</div>
+                    <div class="form-options">
+                        <div class="form-option">
+                            <input type="radio" id="mode1" name="travelmode" checked>
+                            <label for="mode1">🚗 Own Vehicle (Car)</label>
+                        </div>
+                        <div class="form-option">
+                            <input type="radio" id="mode2" name="travelmode">
+                            <label for="mode2">🚌 Public Bus</label>
+                        </div>
+                        <div class="form-option">
+                            <input type="radio" id="mode3" name="travelmode">
+                            <label for="mode3">🚆 Train</label>
+                        </div>
+                        <div class="form-option">
+                            <input type="radio" id="mode4" name="travelmode">
+                            <label for="mode4">🔗 Bus + Train (Combined)</label>
+                        </div>
+                        <div class="form-option">
+                            <input type="radio" id="mode5" name="travelmode">
+                            <label for="mode5">🚕 Taxi</label>
+                        </div>
+                        <div class="form-option">
+                            <input type="radio" id="mode6" name="travelmode">
+                            <label for="mode6">🚶 On Foot</label>
+                        </div>
+                        <div class="form-option">
+                            <input type="radio" id="mode7" name="travelmode">
+                            <label for="mode7">🏢 Staff Services (Organization Transport)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group two-col">
+                    <div>
+                        <label class="form-label">Office Arrival Time <span class="required">*</span></label>
+                        <input type="time" class="form-input" value="09:00">
+                    </div>
+                    <div>
+                        <label class="form-label">Office Departure Time <span class="required">*</span></label>
+                        <input type="time" class="form-input" value="17:30">
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label class="form-label">Are you a daily commuter? <span class="required">*</span></label>
+                    <div class="form-options">
+                        <div class="form-option">
+                            <input type="radio" id="commuter1" name="commuter" checked>
+                            <label for="commuter1">Yes, I travel to office daily</label>
+                        </div>
+                        <div class="form-option">
+                            <input type="radio" id="commuter2" name="commuter">
+                            <label for="commuter2">No, I stay in staff quarters</label>
+                        </div>
+                        <div class="form-option">
+                            <input type="radio" id="commuter3" name="commuter">
+                            <label for="commuter3">No, I work from home mostly</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="showScreen('login')">Cancel</button>
+                <button class="btn btn-primary" onclick="showScreen('profile')">Save & Complete Registration</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SCREEN 3: EMPLOYEE PROFILE -->
+<div class="screen" id="screen-profile">
+    <div class="container">
+        <div class="profile-header">
+            <div class="profile-avatar">HD</div>
+            <div class="profile-info">
+                <div class="profile-name">Hiruni Dissanayake</div>
+                <div class="profile-meta">UDA-2024-3521 • Urban Development Authority</div>
+                <div class="profile-status submitted">
+                    <span>✓</span> Profile Submitted & Approved
+                </div>
+            </div>
+            <button class="edit-btn" onclick="showScreen('register')">Edit Profile</button>
+        </div>
+
+        <div class="alert alert-success">
+            <span>✓</span>
+            <span><strong>Excellent!</strong> Your profile has been submitted and verified by the admin team. Your role has been assigned.</span>
+        </div>
+
+        <div class="info-grid">
+            <!-- Personal Details -->
+            <div class="info-card">
+                <div class="info-card-title">👤 Personal Details</div>
+                <div class="info-row">
+                    <span class="info-label">Full Name</span>
+                    <span class="info-value">Hiruni Dissanayake</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Staff ID</span>
+                    <span class="info-value">UDA-2024-3521</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Designation</span>
+                    <span class="info-value">Urban Planner - Transportation</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Contact</span>
+                    <span class="info-value">+94-71-2845-923</span>
+                </div>
+            </div>
+
+            <!-- Organization Details -->
+            <div class="info-card">
+                <div class="info-card-title">🏢 Organization</div>
+                <div class="info-row">
+                    <span class="info-label">Organization</span>
+                    <span class="info-value">Urban Development Authority</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Department</span>
+                    <span class="info-value">Transportation Planning</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Assigned Role</span>
+                    <span class="info-value"><span class="badge badge-success">Senior Planner</span></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email</span>
+                    <span class="info-value">hiruni.d@uda.gov.lk</span>
+                </div>
+            </div>
+
+            <!-- Permanent Home -->
+            <div class="info-card">
+                <div class="info-card-title">🏠 Permanent Home Address</div>
+                <div class="info-row">
+                    <span class="info-label">Address</span>
+                    <span class="info-value">456 Matara Road, Galle</span>
+                </div>
+            </div>
+
+            <!-- Current Living Details -->
+            <div class="info-card">
+                <div class="info-card-title">🏘️ Current Living Details</div>
+                <div class="info-row">
+                    <span class="info-label">Current Address</span>
+                    <span class="info-value">123 Colombo Road, Colombo 6</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">City</span>
+                    <span class="info-value">Colombo</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">District</span>
+                    <span class="info-value">Colombo</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Province</span>
+                    <span class="info-value">Western Province</span>
+                </div>
+            </div>
+
+            <!-- Commute Details -->
+            <div class="info-card">
+                <div class="info-card-title">🚗 Commute Details</div>
+                <div class="info-row">
+                    <span class="info-label">Distance</span>
+                    <span class="info-value"><span class="badge badge-warning">15 km</span></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Travel Time</span>
+                    <span class="info-value">45 minutes</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Travel Mode</span>
+                    <span class="info-value">Own Vehicle (Car)</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Daily Commuter</span>
+                    <span class="info-value" style="color: var(--success);">✓ Yes</span>
+                </div>
+            </div>
+
+            <!-- Office Hours -->
+            <div class="info-card">
+                <div class="info-card-title">⏰ Office Hours</div>
+                <div class="info-row">
+                    <span class="info-label">Arrival Time</span>
+                    <span class="info-value">09:00 AM</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Departure Time</span>
+                    <span class="info-value">05:30 PM</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">DS Division</span>
+                    <span class="info-value">Colombo</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Status</span>
+                    <span class="info-value"><span class="badge badge-success">Active</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SCREEN 4: ADMIN DASHBOARD -->
+<div class="screen" id="screen-admin">
+    <div class="container">
+        <div class="admin-header">
+            <div>
+                <div class="admin-title">Admin Control Panel</div>
+                <div class="admin-subtitle">Urban Development Authority (UDA) — Employee & Commute Management System</div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">3,456</div>
+                <div class="stat-label">Total Staff Members</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">2,891</div>
+                <div class="stat-label">Profiles Completed</div>
+            </div>
+            <div class="stat-card" style="background: #FEF3C7; border-color: var(--warning);">
+                <div class="stat-value" style="color: var(--warning);">565</div>
+                <div class="stat-label" style="color: var(--warning);">Pending Review</div>
+            </div>
+            <div class="stat-card" style="background: #DCFCE7; border-color: var(--success);">
+                <div class="stat-value" style="color: var(--success);">2,326</div>
+                <div class="stat-label" style="color: var(--success);">Roles Assigned</div>
+            </div>
+        </div>
+
+        <div class="alert alert-warning">
+            <span>⚠️</span>
+            <span><strong>Attention Required:</strong> 565 employees are awaiting role assignment and verification. Review and process pending profiles below.</span>
+        </div>
+
+        <div class="filter-bar">
+            <div class="filter-group" style="flex: 2;">
+                <input type="text" class="search-input" placeholder="Search by name or staff ID...">
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Organization:</label>
+                <select class="filter-input">
+                    <option>All Organizations</option>
+                    <option>UDA</option>
+                    <option>RDA</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Status:</label>
+                <select class="filter-input">
+                    <option>All</option>
+                    <option>Pending</option>
+                    <option>Verified</option>
+                    <option>Active</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="showScreen('addEmployee')">+ Add Staff</button>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Staff Member</th>
+                        <th>Designation</th>
+                        <th>Current District</th>
+                        <th>Distance (km)</th>
+                        <th>Travel Mode</th>
+                        <th>Assign Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="table-name">Hiruni Dissanayake</div>
+                            <div class="table-id">UDA-2024-3521</div>
+                        </td>
+                        <td>Urban Planner - Transportation</td>
+                        <td>Colombo</td>
+                        <td><span class="badge badge-warning">15</span></td>
+                        <td>🚗 Own Vehicle</td>
+                        <td><span class="badge badge-success">Senior Planner</span></td>
+                        <td><span class="badge badge-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-outline" style="font-size: 11px; padding: 6px 10px;">Edit</button>
+                            <button class="btn btn-danger" style="font-size: 11px; padding: 6px 10px;">Remove</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="table-name">Kavya Perera</div>
+                            <div class="table-id">UDA-2024-2847</div>
+                        </td>
+                        <td>Architect</td>
+                        <td>Gampaha</td>
+                        <td><span class="badge badge-warning">28</span></td>
+                        <td>🚌 Public Bus</td>
+                        <td>
+                            <select class="filter-input" style="font-size: 12px; padding: 4px 8px;">
+                                <option>— Assign Role —</option>
+                                <option>Junior Architect</option>
+                                <option>Senior Architect</option>
+                                <option>Lead Architect</option>
+                            </select>
+                        </td>
+                        <td><span class="badge badge-warning">Pending</span></td>
+                        <td>
+                            <button class="btn btn-outline" style="font-size: 11px; padding: 6px 10px;">Edit</button>
+                            <button class="btn btn-danger" style="font-size: 11px; padding: 6px 10px;">Remove</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="table-name">Rajesh Kumar</div>
+                            <div class="table-id">RDA-2023-5412</div>
+                        </td>
+                        <td>Civil Engineer</td>
+                        <td>Kandy</td>
+                        <td><span class="badge badge-warning">52</span></td>
+                        <td>🚆 Train</td>
+                        <td><span class="badge badge-success">Engineer Grade A</span></td>
+                        <td><span class="badge badge-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-outline" style="font-size: 11px; padding: 6px 10px;">Edit</button>
+                            <button class="btn btn-danger" style="font-size: 11px; padding: 6px 10px;">Remove</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="table-name">Amantha Silva</div>
+                            <div class="table-id">UDA-2024-1923</div>
+                        </td>
+                        <td>Finance Officer</td>
+                        <td>Matara</td>
+                        <td><span class="badge badge-danger">68</span></td>
+                        <td>🔗 Bus + Train</td>
+                        <td>
+                            <select class="filter-input" style="font-size: 12px; padding: 4px 8px;">
+                                <option>— Assign Role —</option>
+                                <option>Finance Officer</option>
+                                <option>Senior Finance Officer</option>
+                                <option>Finance Manager</option>
+                            </select>
+                        </td>
+                        <td><span class="badge badge-warning">Pending</span></td>
+                        <td>
+                            <button class="btn btn-outline" style="font-size: 11px; padding: 6px 10px;">Edit</button>
+                            <button class="btn btn-danger" style="font-size: 11px; padding: 6px 10px;">Remove</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="table-name">Dulani Jayasuriya</div>
+                            <div class="table-id">RDA-2023-3156</div>
+                        </td>
+                        <td>Transport Coordinator</td>
+                        <td>Colombo</td>
+                        <td><span class="badge badge-warning">8</span></td>
+                        <td>🚕 Taxi</td>
+                        <td><span class="badge badge-success">Coordinator Grade 1</span></td>
+                        <td><span class="badge badge-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-outline" style="font-size: 11px; padding: 6px 10px;">Edit</button>
+                            <button class="btn btn-danger" style="font-size: 11px; padding: 6px 10px;">Remove</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            <button class="btn">← Previous</button>
+            <button class="btn active">1</button>
+            <button class="btn">2</button>
+            <button class="btn">3</button>
+            <button class="btn">4</button>
+            <button class="btn">Next →</button>
+        </div>
+    </div>
+</div>
+
+<!-- SCREEN 5: ADD EMPLOYEE (ADMIN) -->
+<div class="screen" id="screen-addEmployee">
+    <div class="container">
+        <div style="margin-bottom: 16px;">
+            <button class="btn btn-outline" onclick="showScreen('admin')" style="font-size: 12px;">← Back to Admin Dashboard</button>
+        </div>
+
+        <div class="form-container form-container-wide" style="max-width: 600px;">
+            <div class="form-header">
+                <div class="form-title">Register New Staff Member</div>
+                <div class="form-subtitle">Add employee to the commute management system</div>
+            </div>
+
+            <div class="alert alert-info">
+                <span>ℹ️</span>
+                <span>Complete the form below. The new staff member will receive an email with login credentials.</span>
+            </div>
+
+            <div class="form-group two-col">
+                <div>
+                    <label class="form-label">Full Name <span class="required">*</span></label>
+                    <input type="text" class="form-input" placeholder="Employee full name">
+                </div>
+                <div>
+                    <label class="form-label">Staff ID <span class="required">*</span></label>
+                    <input type="text" class="form-input" placeholder="e.g. UDA-2024-XXXX">
+                </div>
+            </div>
+
+            <div class="form-group two-col">
+                <div>
+                    <label class="form-label">Designation <span class="required">*</span></label>
+                    <input type="text" class="form-input" placeholder="e.g. Urban Planner">
+                </div>
+                <div>
+                    <label class="form-label">Department <span class="required">*</span></label>
+                    <input type="text" class="form-input" placeholder="e.g. Transportation Planning">
+                </div>
+            </div>
+
+            <div class="form-group two-col">
+                <div>
+                    <label class="form-label">Organization <span class="required">*</span></label>
+                    <select class="form-select">
+                        <option>— Select Organization —</option>
+                        <option>Urban Development Authority (UDA)</option>
+                        <option>Road Development Authority (RDA)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Work Email <span class="required">*</span></label>
+                    <input type="email" class="form-input" placeholder="staff@uda.gov.lk">
+                </div>
+            </div>
+
+            <div class="form-group two-col">
+                <div>
+                    <label class="form-label">Contact Number</label>
+                    <input type="tel" class="form-input" placeholder="+94-71-1234-567">
+                </div>
+                <div>
+                    <label class="form-label">Current District</label>
+                    <select class="form-select">
+                        <option>— Select District —</option>
+                        <option>Colombo</option>
+                        <option>Gampaha</option>
+                        <option>Kalutara</option>
+                        <option>Kandy</option>
+                        <option>Matale</option>
+                        <option>Nuwara Eliya</option>
+                        <option>Galle</option>
+                        <option>Matara</option>
+                        <option>Hambantota</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group two-col">
+                <div>
+                    <label class="form-label">Distance to Office (km)</label>
+                    <input type="number" class="form-input" placeholder="e.g. 25" step="0.1">
+                </div>
+                <div>
+                    <label class="form-label">Travel Mode</label>
+                    <select class="form-select">
+                        <option>— Select —</option>
+                        <option>Own Vehicle (Car)</option>
+                        <option>Public Bus</option>
+                        <option>Train</option>
+                        <option>Bus + Train</option>
+                        <option>Taxi</option>
+                        <option>On Foot</option>
+                        <option>Staff Services</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Assign Initial Role</label>
+                <select class="form-select">
+                    <option>— No Role Assigned Yet —</option>
+                    <option>Manager</option>
+                    <option>Senior Coordinator</option>
+                    <option>Coordinator</option>
+                    <option>Staff</option>
+                </select>
+                <div class="form-help">Role can be modified later. Leave blank if employee needs to complete profile first.</div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="showScreen('admin')">Cancel</button>
+                <button class="btn btn-primary" onclick="alert('✓ Staff member added successfully! Invitation email sent to their work email.'); showScreen('admin');">Add Staff Member</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showScreen(screenId) {
+        // Hide all screens
+        document.querySelectorAll('.screen').forEach(screen => {
+            screen.classList.remove('active');
+        });
+        
+        // Remove active state from all buttons
+        document.querySelectorAll('.screen-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Show selected screen
+        const screenElement = document.getElementById(`screen-${screenId}`);
+        if (screenElement) {
+            screenElement.classList.add('active');
+        }
+        
+        // Set active button
+        const screenMap = {
+            'login': 0,
+            'register': 1,
+            'profile': 2,
+            'admin': 3,
+            'addEmployee': 4
+        };
+        
+        if (screenMap[screenId] !== undefined) {
+            document.querySelectorAll('.screen-btn')[screenMap[screenId]].classList.add('active');
+        }
+        
+        // Show/hide navbar user section
+        const showNav = ['profile', 'register', 'admin', 'addEmployee'].includes(screenId);
+        document.getElementById('navUser').style.display = showNav ? 'flex' : 'none';
+        
+        // Update role based on screen
+        if (screenId === 'admin' || screenId === 'addEmployee') {
+            document.getElementById('userRole').textContent = 'Administrator';
+        } else {
+            document.getElementById('userRole').textContent = 'Employee';
+        }
+    }
+    
+    // Initialize
+    showScreen('login');
+</script>
+
+</body>
+</html>
