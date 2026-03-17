@@ -5,7 +5,7 @@ open this URL in your browser.
 
 ---
 
-## 🎮 How to Use the Wireframe
+##  How to Use the Wireframe
 
 ### **Screen 1: Login Page**
 - Enter Staff ID: `UDA-2024-3521`
@@ -53,7 +53,7 @@ open this URL in your browser.
 
 ---
 
-## 🎨 Features of This Wireframe
+##  Features of This Wireframe
 
 ### **User Interface**
 - ✅ Modern, clean design with teal/blue color scheme
@@ -80,7 +80,7 @@ open this URL in your browser.
 
 ---
 
-## 📊 Sri Lankan Districts (25 Total)
+##  Sri Lankan Districts (25 Total)
 
 The wireframe includes all 25 districts:
 
@@ -98,7 +98,7 @@ The wireframe includes all 25 districts:
 
 ---
 
-## 🌐 Sri Lankan Provinces (9 Total)
+##  Sri Lankan Provinces (9 Total)
 
 1. Western Province
 2. Central Province
@@ -112,7 +112,7 @@ The wireframe includes all 25 districts:
 
 ---
 
-## 👤 Sample User Credentials
+##  Sample User Credentials
 
 For testing the login screen:
 
@@ -126,7 +126,7 @@ For testing the login screen:
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 - **HTML5** - Structure
 - **CSS3** - Styling (inline styles, no external dependencies)
@@ -136,7 +136,7 @@ For testing the login screen:
 
 ---
 
-## 📱 Browser Compatibility
+##  Browser Compatibility
 
 Works on all modern browsers:
 
@@ -151,7 +151,7 @@ Works on all modern browsers:
 
 ---
 
-## 📋 Screens Overview
+##  Screens Overview
 
 ### **Screen 1: Login Page**
 - Google SSO button
@@ -199,7 +199,7 @@ Works on all modern browsers:
 
 ---
 
-## 🔄 Future Development (Next Steps)
+##  Future Development (Next Steps)
 
 To turn this wireframe into a production system, you would need:
 
